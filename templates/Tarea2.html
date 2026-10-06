@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+  <title>Avistamiento de aves en Chile</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+    .error { color: #c0392b; font-size: 0.85em; display: none; }
+    .error.visible { display: block; }
+    .actividad-item { border: 1px solid #ccc; padding: 10px; margin: 8px 0; border-radius: 4px; }
+    .actividad-item .tipo { font-size: 0.8em; color: #666; text-transform: uppercase; }
+    .actividad-item .nombre { font-weight: bold; }
+    .contador { color: #666; font-size: 0.9em; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+    <h1>Registro de voluntario(a)</h1>
+    <form id="form-voluntarios" method="POST" action="/register">
+        <div>
+            <label for="nombre-voluntario">Nombre del voluntario:</label>
+            <input type="text" id="nombre-voluntario" name="nombre-voluntario">
+            <span class="error" id="error-nombre">Debe ingresar un nombre con al menos 3 caracteres</span>
+        </div>
+        <br>
+        <div>
+            <label for="correo-voluntario">Dirección de correo electrónico:</label>
+            <input type="email" id="correo-voluntario" name="correo-voluntario">
+            <span class="error" id="error-correo">Debe ingresar un correo válido</span>
+        </div>
+        <br>
+        <div>
+            <label for="region-voluntario">Ingrese su región</label>
+            <select name="region-voluntario" id="region-voluntario" onchange="this.form.submit()">
+                <option value="">--Seleccione una región--</option>
+                {% for region in regiones %}
+                    <option value="{{ region.id }}" {% if region.id|string == region_id|string %}selected{% endif %}>{{ region.nombre }}</option>
+                {% endfor %}
+            </select>
+            <span class="error" id="error-region">Debe seleccionar una región</span>
+        </div>
+        <br>
+        <div>
+            <label for="comuna-voluntario">Ingrese su comuna</label>
+            <select name="comuna-voluntario" id="comuna-voluntario">
+                <option value="">--Seleccione una comuna--</option>
+                {% for comuna in comunas %}
+                    <option value="{{ comuna.id }}">{{ comuna.nombre }}</option>
+                {% endfor %}
+            </select>
+            <span class="error" id="error-comuna">Debe seleccionar una comuna</span>
+        </div>
+    </form>
+    
+    <h2>Información de avistamiento de ave</h2>
+    <form id="form-avistamiento">
+        <div>
+            <label for="tipo-ave">Ingrese el tipo de ave avistada:</label>
+            <input type="text" id="tipo-ave">
+            <span class="error" id="error-tipo">Debe ingresar un tipo de ave válida (al menos 2 caracterer)</span>
+        </div>
+        <br>
+        <div>
+            <label for="nombre-ave">Nombre del ave:</label>
+            <input type="text" id="nombre-ave">
+            <span class="error" id="error-nombre-ave">Debe ingresar un nombre válido (al menos 2 caracteres)</span>
+        </div>
+        <br>
+        <div>
+            <label for="lugar-ave">Lugar de avistamiento del ave:</label>
+            <input type="text" id="lugar-ave">
+            <span class="error" id="error-lugar">Debe ingresar información de al menos 10 caracteres (especifique el lugar)</span>
+        </div>
+        <br>
+        <div>
+            <label for="fecha">Fecha de avistamiento:</label>
+            <input type="date" id="fecha">
+            <span class="error" id="error-fecha">La fecha no puede ser futura ni de más de una semana atrás</span>
+        </div>
+        <br>
+        <div>
+            <label for="hora">Hora de avistamiento:</label>
+            <input type="time" id="hora">
+            <span class="error" id="error-hora">No puede ser una hora futura</span>
+        </div>
+        <br>
+        <div>
+            <label for="foto-video">Registro fotográfico (obligatorio)</label>
+            <input type="file" id="foto-video" accept="image/*,video/*">
+            <span class="error" id="error-imagen">Debe ingresar al menos una foto o video</span>
+        </div>
+    </form>
+
+    <br>
+    <div>
+        <button id="submit" type="button">Enviar información</button>
+    </div>
+
+<script src="validation.js"></script>
+</body>
+</html>
